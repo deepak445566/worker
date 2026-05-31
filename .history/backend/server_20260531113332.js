@@ -68,7 +68,7 @@ export const io = new Server(server, {
   allowEIO3: true
 });
 
-
+// ✅ Socket middleware with better token extraction
 io.use((socket, next) => {
   try {
     // Try to get token from multiple sources
