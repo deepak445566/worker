@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 const ServiceCategories = () => {
   const navigate = useNavigate();
   const [hoveredCategory, setHoveredCategory] = useState(null);
- const categories = [
+
+  const categories = [
     {
       id: 1,
       name: 'Plumber',
@@ -86,7 +87,6 @@ const ServiceCategories = () => {
       popular: false
     }
   ];
- 
 
   const handleCategoryClick = (category) => {
     navigate(`/user/services?category=${category.name.toLowerCase()}`);

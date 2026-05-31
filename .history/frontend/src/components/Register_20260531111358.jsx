@@ -263,17 +263,15 @@ const Register = () => {
                         required
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
                       >
-                     
-  <option value="">Select Service</option>
-  <option value="Plumber">Plumber</option>
-  <option value="Electrician">Electrician</option>
-  <option value="Carpenter">Carpenter</option>
-  <option value="Cleaner">Cleaner</option>
-  <option value="AC Repair">AC Repair</option>
-  <option value="Painter">Painter</option>
-  <option value="Gardener">Gardener</option>
-  <option value="Mechanic">Mechanic</option>
-</select>
+                        <option value="">Select Service</option>
+                        <option value="Plumbing">Plumbing</option>
+                        <option value="Electrical">Electrical</option>
+                        <option value="Cleaning">Cleaning</option>
+                        <option value="Carpentry">Carpentry</option>
+                        <option value="Painting">Painting</option>
+                        <option value="AC Repair">AC Repair</option>
+                        <option value="Appliance Repair">Appliance Repair</option>
+                      </select>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Price per hour (₹) *</label>
