@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+
+
+.park {
+  font-family: "Parkinsans", sans-serif;
+
+  font-style: normal;
+}
+
+
+.abr {
+  font-family: "Abril Fatface", serif;
+  font-weight: 400;
+  font-style: normal;
+}

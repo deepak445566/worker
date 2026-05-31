@@ -1,0 +1,15 @@
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Or if you want to ignore all .env files
+*.env
+
+.history
+node_modules
+
+echo ".history/" >> .gitignore
+echo ".env" >> .gitignore
