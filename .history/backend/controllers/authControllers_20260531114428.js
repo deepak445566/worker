@@ -239,8 +239,7 @@ export const loginUser = async (req, res) => {
         role: user.role,
         verified: user.verified
       },
-      worker: workerData,
-       token: token
+      worker: workerData
     });
 
   } catch (error) {

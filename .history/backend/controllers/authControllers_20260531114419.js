@@ -150,8 +150,8 @@ export const registerUser = async (req, res) => {
         role: savedUser.role,
         verified: savedUser.verified
       },
-      worker: workerData,
-       token: token
+      worker: workerData
+      
     });
 
   } catch (error) {
@@ -239,8 +239,7 @@ export const loginUser = async (req, res) => {
         role: user.role,
         verified: user.verified
       },
-      worker: workerData,
-       token: token
+      worker: workerData
     });
 
   } catch (error) {

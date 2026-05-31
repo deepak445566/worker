@@ -18,90 +18,55 @@ export const AuthProvider = ({ children }) => {
 
   const API_URL = "https://worker-ibbp.onrender.com/api/auth";
 
-  // ✅ Save token to multiple locations
-  const saveToken = (token) => {
-    if (token) {
-      localStorage.setItem('authToken', token);
-      sessionStorage.setItem('authToken', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      console.log('✅ Token saved to localStorage, sessionStorage, and axios headers');
-      return true;
-    }
-    return false;
-  };
-
-  // ✅ Get token from storage
-  const getToken = () => {
-    return localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-  };
-
-  // ✅ Clear token
-  const clearToken = () => {
-    localStorage.removeItem('authToken');
-    sessionStorage.removeItem('authToken');
-    delete axios.defaults.headers.common['Authorization'];
-    console.log('🗑️ Token cleared');
-  };
-
-  // ✅ Fetch user data
   const fetchUserData = async () => {
-    const token = getToken();
-    
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
     try {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
       const response = await axios.get(`${API_URL}/me`, {
         withCredentials: true
       });
 
       if (response.data) {
-        setUser(response.data.user);
-        if (response.data.user?.role === "worker") {
-          setWorker(response.data.worker);
+        const userData = response.data.user;
+        setUser(userData);
+
+        // worker data from backend
+        if (userData.role === "worker") {
+          setWorker(response.data.worker || null);
         }
       }
+
     } catch (error) {
-      console.error("Fetch user error:", error);
+      console.error("isAuth error:", error.response?.status);
+
+      // if unauthorized, set user to null
       if (error.response?.status === 401) {
-        clearToken();
         setUser(null);
       }
+
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Register
+  const checkAuth = async () => {
+    await fetchUserData();
+  };
+
   const register = async (userData) => {
     try {
       const response = await axios.post(`${API_URL}/register`, userData, {
         withCredentials: true
       });
 
-      console.log('Register response:', response.data);
-
       if (response.data.success) {
-        // Save token from response
-        if (response.data.token) {
-          saveToken(response.data.token);
-        }
-        
+        // User is automatically verified, no OTP needed
         setUser(response.data.user);
         if (response.data.worker) {
           setWorker(response.data.worker);
         }
-        
         return { success: true, data: response.data };
       }
-      
-      return { success: false, error: response.data.message };
     } catch (error) {
-      console.error('Register error:', error);
+      console.error('Registration error:', error);
       return { 
         success: false, 
         error: error.response?.data?.message || 'Registration failed' 
@@ -109,30 +74,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ✅ Login
   const login = async (email, password) => {
     try {
       const response = await axios.post(`${API_URL}/login`, { email, password }, {
         withCredentials: true
       });
 
-      console.log('Login response:', response.data);
-
       if (response.data.success) {
-        // Save token from response
-        if (response.data.token) {
-          saveToken(response.data.token);
-        }
-        
         setUser(response.data.user);
         if (response.data.worker) {
           setWorker(response.data.worker);
         }
-        
         return { success: true, data: response.data };
       }
-      
-      return { success: false, error: response.data.message };
     } catch (error) {
       console.error('Login error:', error);
       return { 
@@ -142,7 +96,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ✅ Logout
   const logout = async () => {
     try {
       await axios.post(`${API_URL}/logout`, {}, {
@@ -152,7 +105,6 @@ export const AuthProvider = ({ children }) => {
       console.error('Logout error:', error);
     }
     
-    clearToken();
     setUser(null);
     setWorker(null);
   };
@@ -170,8 +122,7 @@ export const AuthProvider = ({ children }) => {
       register,
       login,
       fetchUserData,
-      getToken,
-      saveToken
+      checkAuth
     }}>
       {children}
     </AuthContext.Provider>
